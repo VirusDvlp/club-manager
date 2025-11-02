@@ -12,3 +12,9 @@ class CreateDatingProfileFSM(StatesGroup):
     alias_state = State()
     profile_photo_state = State()
     description_state = State()
+
+
+class CreateInitiativeFSM(StatesGroup):
+    date_state = State()
+    place_state = State()
+    comment_state = State()

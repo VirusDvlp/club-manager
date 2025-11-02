@@ -29,6 +29,10 @@ class ChatSettings(BaseModel):
     # topics in supergroup
 
     DATING_PROFILES_THREAD_ID: int
+    INITIATIVES_THREAD_ID: int
+    BUISNESS_MEETS_THREAD_ID: int
+    WOMEN_MEETS_THREAD_ID: int
+    FRENCH_CLUB_THREAD_ID: int
 
     ADMIN_CHAT_ID: int
 

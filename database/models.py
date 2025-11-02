@@ -1,29 +1,80 @@
-from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
-from sqlalchemy import BigInteger, func, String, Boolean
+from sqlalchemy.orm import (
+    DeclarativeBase, declared_attr, Mapped, mapped_column, relationship
+)
+from sqlalchemy.ext.asyncio import AsyncAttrs
+from sqlalchemy import BigInteger, func, String, Boolean, ForeignKey
 
 import datetime
+
+from utils.enums import EventType
 
 
 class Base(AsyncAttrs, DeclarativeBase):
     __abstract__ = True
     
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
 
     @declared_attr.directive
     def __tablename__(cls) -> str:
-        return cls.__name__.lower() + 's'
+        table_name = []
+        table_name.append(cls.__name__[0].lower())
+        for c in cls.__name__[1:]:
+            if c.isupper():
+                table_name.append('_')
+                table_name.append(c.lower())
+            else:
+                table_name.append(c)
+
+        return ''.join(table_name) + 's'
 
 
 class User(Base):
     telegram_id: Mapped[int] = mapped_column(BigInteger, unique=True)
     telegram_username: Mapped[str] = mapped_column(String(32))
-    register_date: Mapped[datetime] = mapped_column(server_default=func.now())
+    register_date: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     has_private: Mapped[bool] = mapped_column()
 
 
-class BaseEvent(Base):
-    __abstract__ = True
+class Initiative(Base):
 
-    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
-    max_members: Mapped[int] = mapped_column(default=0)
-    date: Mapped[datetime] = mapped_column(Boolean, default=True)
+    creator: Mapped["User"] = relationship(
+        "User",
+        back_populates="initiatives"
+    )
+    creator_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+
+    date_time: Mapped[datetime.datetime] = mapped_column()
+    place: Mapped[str] = mapped_column(String(200))
+    description: Mapped[str] = mapped_column(String(300))
+
+    # for moderated initiatives
+    activity_type: Mapped[str] = mapped_column(String(50), nullable=True)
+    verify: Mapped[bool] = mapped_column(default=False)
+
+
+class MemberEvent(Base):
+    date_time: Mapped[datetime.datetime]
+    place: Mapped[str] = mapped_column(String(200))
+    description: Mapped[str] = mapped_column(String(200))
+    members_limit: Mapped[int] = mapped_column(default=1)
+    members_left: Mapped[int] = mapped_column(default=0)
+    event_type: Mapped[EventType]
+
+
+class EventMembership(Base):
+
+    user: Mapped["User"] = relationship(
+        "User",
+        back_populates="initiatives"
+    )
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+
+    event: Mapped["MemberEvent"] = relationship(
+        "MemberEvent",
+        back_populates="initiatives"
+    )
+    event_id: Mapped[int] = mapped_column(ForeignKey("member_events.id"))
+
+    created_ad: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
+    is_memeber: Mapped[bool] = mapped_column(default=True)
+

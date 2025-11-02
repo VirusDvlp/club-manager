@@ -6,3 +6,5 @@ class EventType(Enum):
     TABLE_GAMES = 1
     BUISNESS_MEETS = 2
     WOMEN_MEETS = 3
+    INITIATIVE = 4
+    MODERATED_INITTIATIVE = 5

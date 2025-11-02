@@ -10,7 +10,7 @@ from database.utils import connection
 from fsm.user.private import SuggestActivityFSM
 
 from text import get_activity_suggestion_text
-from config import settings
+from config import chat_settings
 
 
 async def ask_name(c: types.CallbackQuery, state: FSMContext):
@@ -49,7 +49,7 @@ async def create_suggestion(m: types.Message, state: FSMContext):
     s_data = await state.get_data()
 
     await m.bot.send_message(
-        settings.ADMIN_CHAT_ID,
+        chat_settings.ADMIN_CHAT_ID,
         get_activity_suggestion_text(
             name=s_data['name'],
             description=s_data['descr'],

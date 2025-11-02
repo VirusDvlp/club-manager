@@ -15,10 +15,15 @@ from database.utils import connection
 async def start_cmd(m: types.Message, state: FSMContext, db_session: Async):
     await state.clear()
 
-    if not UserDAO.get_user(db_session, m.from_user.id):
-        UserDAO.register_user(
+    user = await UserDAO.get_obj(db_session, telegram_id=m.from_user.id)
+    if not user:
+        await UserDAO.register_user(
             db_session, m.from_user.id, m.from_user.username, True
         )
+    else:
+        if not user.has_bot_chat:
+            user.has_bot_chat = True
+            await db_session.commit()
 
 
 
