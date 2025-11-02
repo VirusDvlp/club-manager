@@ -1,14 +1,16 @@
 from utils.enums import EventType
 
+from datetime import datetime
 
-def get_activity_suggestion_text(name, description, date, place, username):
+
+def get_activity_suggestion_text(name, description, date: datetime, place, username):
     return f"""
 Новое предложение активности от пользователя @{username}
 Название: {name}
 
 {description}
 
-Дата и время: {date}
+Дата и время: {date.strftime("%d-%m-%Y %H:%M")}
 Место встречи: {place}
 """
 
@@ -26,39 +28,50 @@ def get_initiative_text(date, place, comment, activity_type):
     return f"""
 Инициатива
 📍 {place}  
-📅 {date}  
+📅 {date.strftime("%d-%m-%Y %H:%M")}  
 🏃‍♀️ Тип активности: {activity_type}
 💬 {comment}      
 """
 
 
-def get_french_club_card_text(date, place, description, memebers_left):
+def get_french_club_card_text(date_time, place, description, members_left):
     return f"""
 💼  Мастермайнд
 📍 {place}
-📅 {date}  
+📅 {date.strftime("%d-%m-%Y %H:%M")}  
 👥 Мест осталось: {members_left}  
 💬 {description}
 """
 
 
-def get_women_meets_card_text(date, place, description, memebers_left):
+def get_women_meets_card_text(date_time, place, description, members_left):
     return f"""
 ☕️ Женская психологическая встреча
 📍 {place}
-📅 {date}  
+📅 {date.strftime("%d-%m-%Y %H:%M")}  
 👥 Мест осталось: {members_left}  
 💬 {description}
 """
 
-def get_buisness_meet_card_text(date, place, description, memebers_left):
+def get_buisness_meet_card_text(date_time, place, description, members_left):
     return f"""
 🇫🇷 Разговорный клуб  
 📍 {place}
-📅 {date}  
+📅 {date.strftime("%d-%m-%Y %H:%M")}  
 👥 Мест осталось: {members_left}
 💬 {description}
 """
+
+
+def get_table_game_card_text(game_name, date_time, place, description, members_left):
+    return f"""
+🎲 {game_name}
+📍 {place}
+📅 {date_time.strftime("%d-%m-%Y %H:%M")}
+👥 Мест {members_left}
+💬 {description}
+"""
+
 
 
 def get_event_name(event_type: EventType):
@@ -69,4 +82,19 @@ def get_event_name(event_type: EventType):
             return "💼 Мастермайнды / Бизнес"
         case (EventType.WOMEN_MEETS):
             return "☕️ Женские психологические встречи"
-    # end match
+
+
+def get_account_description(rating: int):
+    return """
+Баллы: {rating}    
+"""
+
+
+two_hours_before_text_french = "Встречаемся через 2 часа! Не опаздывайте, проверьте расписание своего транспорта🙏"
+day_before_text_french = "Завтра встреча клуба французского! 🇫🇷 Готовим береты!"
+
+two_hours_before_text_women = "Встречаемся через 2 часа! Не опаздывайте, проверьте расписание своего транспорта🙏"
+day_before_text_women = "Завтра встречаемся с девочками! Берем с собой всё свое тепло☀️"
+
+two_hours_before_text_buisness = "Встречаемся через 2 часа! Не опаздывайте, проверьте расписание своего транспорта🙏"
+day_before_text_buisness = "Завтра особый день - найдется решение мучающего вопроса! Фиксируйте в заметках запрос и будьте готовы к мозговому штурму😅"

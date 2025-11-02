@@ -4,6 +4,8 @@ from sqlalchemy.orm import (
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy import BigInteger, func, String, Boolean, ForeignKey
 
+from typing import List
+
 import datetime
 
 from utils.enums import EventType
@@ -33,6 +35,13 @@ class User(Base):
     telegram_username: Mapped[str] = mapped_column(String(32))
     register_date: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     has_private: Mapped[bool] = mapped_column()
+    rating: Mapped[int] = mapped_column(default=0)
+    is_admin: Mapped[bool] = mapped_column(default=False)
+
+    memberships: Mapped[List["EventMembership"]] = relationship(
+        "EventMembership",
+        back_populates="user"
+    )
 
 
 class Initiative(Base):
@@ -57,7 +66,13 @@ class MemberEvent(Base):
     description: Mapped[str] = mapped_column(String(200))
     members_limit: Mapped[int] = mapped_column(default=1)
     members_left: Mapped[int] = mapped_column(default=0)
+    activity_name: Mapped[str] = mapped_column(String(100), null=True)
     event_type: Mapped[EventType]
+
+    members: Mapped[List["EventMembership"]] = relationship(
+        "EventMembership",
+        back_populates="event"
+    )
 
 
 class EventMembership(Base):
@@ -76,4 +91,5 @@ class EventMembership(Base):
 
     created_ad: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     is_memeber: Mapped[bool] = mapped_column(default=True)
+    is_come: Mapped[bool] = mapped_column(default=False)
 

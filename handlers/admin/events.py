@@ -3,6 +3,9 @@ from aiogram.fsm.context import FSMContext
 from aiogram.filters import StateFilter
 
 
+from datetime import timedelta
+
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
@@ -20,6 +23,8 @@ from text import get_buisness_meet_card_text, get_french_club_card_text, get_wom
 
 from utils.enums import EventType
 from utils.date import validate_date_time
+
+from scheduler.event_jobs import setup_event_notifications
 
 from config import chat_settings
 
@@ -65,7 +70,7 @@ async def ask_description(m: types.Message, state: FSMContext):
     await state.set_state(CreateEventFSM.descr_state)
 
     await m.answer(
-        "Придумайте описание дял встречи"
+        "Придумайте описание для встречи"
     )
 
 
@@ -134,6 +139,12 @@ async def create_event(bot, creator_id: int, state_data: dict, db_session: Async
     )
 
     await db_session.commit()
+
+    setup_event_notifications(
+        event_date_time=state_data['date_time'],
+        event_id=new_event.id,
+        event_type=state_data['event_type']
+    )
 
     await bot.send_message(
         creator_id,

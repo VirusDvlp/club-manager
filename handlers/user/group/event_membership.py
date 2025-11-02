@@ -11,10 +11,36 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from filters.chat_filters import GroupFilter
 
 from database.dao import MembersEventDAO, EventMembershipDAO, UserDAO
+from database.utils import connection
 
 from utils.enums import EventType
 
 from text import get_event_name
+
+
+async def notice_user_about_seats_left(original_message: types.Message, members_left: int):
+    # Notice user about seats left
+
+    notice = False # If need notification (Only when certain values)
+
+    if members_left == 1:
+        notice = True
+        notification_message = "Последний шанс попасть в историю мафии! Только 1 место осталось!"
+    elif members_left == 5:
+        notice = True
+        notification_message = "Каких то 5 мест всего осталось!"
+    elif members_left == 10:
+        notice = True
+        notification_message = "Пока вы не спешили осталось 10 мест на игру!"
+    elif members_left == 15:
+        notice = True
+        notification_message = "ИЗОБИЛИЕ! Целых 15 мест свободны! Разбирайте! (лес рук)"
+
+    if notice:
+        await original_message.reply(
+            text=notification_message
+        )
+
 
 
 @connection
@@ -100,10 +126,8 @@ async def user_cancel_membership(c: types.CallbackQuery, db_session: AsyncSessio
         )
 
     match (event_type):
-        case EventType.INITIATIVE:
-
-            pass
-        case EventType.FRENCH_CLUB | EventType.BUISNESS_MEETS | EventType.WOMEN_MEETS:
+        
+        case EventType.FRENCH_CLUB | EventType.BUISNESS_MEETS | EventType.WOMEN_MEETS | EventType.TABLE_GAMES:
             event = await MembersEventDAO.get_obj(db_session, id=event_id)
 
             if event:
@@ -135,12 +159,29 @@ async def user_cancel_membership(c: types.CallbackQuery, db_session: AsyncSessio
                                     )
                                 except TelegramForbiddenError:
                                     pass
-                        
+                            else:
+                                event.members_left += 1
+                        else: 
+                            event.members_left += 1
+
+                        alert_message = "Отмена учтена, место снова свободно! Ждем на следующую встречу🫶"
+
+                        if event_type == EventType.TABLE_GAMES:
+                            time_difference = event.date_time - datetime.now()
+
+                            # If user cancel partition <24h before event - increase rating
+                            if time_difference.days == 0:
+                                await UserDAO.change_user_rating(db_session, c.from_user.id, -1)
+                                alert_message = "Ты решил отменить участие менее чем за сутки? 😬 Минус 1 балл!"
 
                         await c.answer(
-                            "Вы успешно отказались от участия в мероприятии",
+                            alert_message,
                             show_alert=True
                         )
+
+                        if event_type == EventType.TABLE_GAMES:
+                            notice_user_about_seats_left(c.message, event.members_left)
+
                     else:
                         await c.answer(
                             "Вы еще не участвуете в данном мероприятии, нажмите на кнопку \"Присоединиться\"",
@@ -151,6 +192,72 @@ async def user_cancel_membership(c: types.CallbackQuery, db_session: AsyncSessio
             else:
                 await c.answer("Ошибка: мероприятие не найдено", show_alert=True)
                 await c.message.edit_reply_markup(reply_markup=None)
+    await db_session.commit()
+
+
+@connection
+async def player_came_on_game(c: types.CallbackQuery, db_session: AsyncSession):
+    event_id = c.data.split('_')[1]
+
+    user = await UserDAO.get_obj(db_session, telegram_id=c.from_user.id)
+
+    if not user:
+        user = await UserDAO.register_user(
+            session=db_session,
+            telegram_id=c.from_user.id,
+            username=c.from_user.username,
+            has_bot_chat=False
+        )
+
+    event = await MembersEventDAO.get_obj(
+        db_session,
+        id=event_id
+    )
+
+    if event:
+        now = datetime.now()
+        if now > event.date_time:
+            user_membership = await EventMembershipDAO.get_obj(
+                db_session,
+                user_id=user.id,
+                event_id=event_id
+            )
+            if user_membership:
+                if not user_membership.is_come:
+                    if user_membership.is_member:
+                        user_membership.is_come = True
+                        await UserDAO.change_user_rating(
+                            db_session,
+                            c.from_user.id,
+                            1
+                        )
+
+                        await c.answer(
+                            "✅ Ваше присутствие учтено"
+                        )
+                    else:
+                        await c.answer(
+                            "Вы не можете участвовать в этом мероприятии!"
+                        )
+                else:
+                    await c.answer(
+                        "Вы уже отметились!",
+                        show_alert=True
+                    )
+            else:
+                await c.answer(
+                    "Вы не участвуете в этом мероприятии!"
+                )
+        else:
+            await c.answer(
+                "Мероприятие еще не началось",
+                show_alert=True
+            )
+    else:
+        await c.answer(
+            "Событие не найдено",
+            show_alert=True
+        )
     await db_session.commit()
 
 
@@ -165,4 +272,9 @@ def register_event_membership_handlers(dp: Dispatcher):
         user_cancel_membership,
         GroupFilter(),
         F.data.startswith("cancelpevent_")
+    )
+    dp.callback_query.register(
+        player_came_on_game,
+        GroupFilter(),
+        F.data.startswith("cameongame_")
     )

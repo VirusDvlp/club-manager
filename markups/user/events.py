@@ -5,15 +5,13 @@ from utils.enums import EventType
 
 def get_take_part_in_event_markup(event_id: int, event_type: EventType):
 
-    return InlineKeyboardMarkup(
+    keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [
                 InlineKeyboardButton(
                     text="➕ Присоединиться",
                     callback_data=f"takepevent_{event_id}_{event_type}"
-                )
-            ],
-            [
+                ),
                 InlineKeyboardButton(
                     text="❌ Отменить участие",
                     callback_data=f"cancelpevent_{event_id}_{event_type}"
@@ -21,3 +19,15 @@ def get_take_part_in_event_markup(event_id: int, event_type: EventType):
             ]
         ]
     )
+
+    if event_type == EventType.TABLE_GAMES:
+        keyboard.inline_keyboard.append(
+            [
+                InlineKeyboardButton(
+                    text="Я пришел на игру",
+                    callback_data=f"cameongame_{event_id}"
+                )
+            ]
+        )
+
+    return keyboard

@@ -1,7 +1,9 @@
 from .database import async_session_maker
+from functools import wraps
 
 
 def connection(method):
+    @wraps(method)
     async def wrapper(*args, **kwargs):
         async with async_session_maker() as session:
             try:

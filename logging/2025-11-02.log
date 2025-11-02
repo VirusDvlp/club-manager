@@ -1,0 +1,5 @@
+tg_bot 2025-11-02 08:27:34,730 INFO Бот начал свою работу
+aiogram.dispatcher 2025-11-02 08:27:34,731 INFO Start polling
+aiogram.dispatcher 2025-11-02 08:27:36,353 WARNING Received SIGINT signal
+aiogram.dispatcher 2025-11-02 08:27:36,354 INFO Polling stopped
+tg_bot 2025-11-02 08:27:36,354 INFO Бот завершил свою работу

@@ -31,6 +31,10 @@ event_type_markup = InlineKeyboardMarkup(
         [InlineKeyboardButton(
             text="☕️ Женские психологические встречи",
             callback_data="createevent_3"
+        )],
+        [InlineKeyboardButton(
+            text=" 🎲 Настольные игры",
+            callback_data="createevent_1"
         )]
     ]
 )

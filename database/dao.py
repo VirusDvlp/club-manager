@@ -1,7 +1,8 @@
 from typing import List, Any, Dict
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql import select, asc
+from sqlalchemy.sql import select, asc, update
+from sqlalchemy.orm import joinedload
 
 from .models import User, MemberEvent, EventMembership, Initiative
 
@@ -49,7 +50,8 @@ class UserDAO(BaseDAO):
         session: AsyncSession,
         telegram_id: int,
         username: str,
-        has_bot_chat: bool
+        has_bot_chat: bool,
+        is_admin: bool = False
     ) -> User:
         return await cls.add(
             session,
@@ -57,6 +59,24 @@ class UserDAO(BaseDAO):
             telegram_username=username,
             is_private=has_bot_chat
         )
+
+    @classmethod
+    async def get_active_users(cls, session: AsyncSession):
+        query = select(cls.model).filter_by(has_private=True)
+
+        result = await session.execute(query)
+
+        records = result.scalars().all()
+
+        return records
+
+    @classmethod
+    async def change_user_rating(cls, session: AsyncSession, telegram_id: int, change: int):
+        query = update(cls.model).where(User.telegram_id==telegram_id).values(
+            rating=User.rating + change
+        )
+
+        await session.execute(query)
 
 
 class MembersEventDAO(BaseDAO):
@@ -83,6 +103,22 @@ class MembersEventDAO(BaseDAO):
         db_session.add(new_event)
         await db_session.flush()
         return new_event
+
+
+    @classmethod
+    async def get_event_with_members(cls, db_session: AsyncSession, event_id: int):
+        query = select(MemberEvent).options(
+            joinedload(
+                MemberEvent.members
+            ).joinedload(
+                EventMembership.user
+            )
+        ).filter_by(MemberEvent.id == event_id)
+
+        res = await db_session.execute(query)
+        event = res.scalar_one_or_none()
+        return event
+
 
 
 class EventMembershipDAO(BaseDAO):

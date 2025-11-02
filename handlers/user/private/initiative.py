@@ -100,7 +100,7 @@ async def create_initiative(m: types.Message, state: FSMContext, db_session):
     )
 
 
-def register_create_initiative(dp: Dispatcher):
+def register_create_initiative_handlers(dp: Dispatcher):
     dp.callback_query.register(ask_date, F.data == "create_initiative")
     dp.message.register(ask_place, StateFilter(CreateInitiativeFSM.date_state))
     dp.message.register(ask_comment, StateFilter(CreateInitiativeFSM.place_state))

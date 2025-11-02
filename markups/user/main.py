@@ -3,6 +3,12 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 main_user_markup = InlineKeyboardMarkup(
     inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text="👤 Личный кабинет",
+                callback_data="lk"
+            )
+        ],
         [InlineKeyboardButton(
             text="Создать инициативу",
             callback_data="create_initiative"

@@ -33,10 +33,12 @@ class ChatSettings(BaseModel):
     BUISNESS_MEETS_THREAD_ID: int
     WOMEN_MEETS_THREAD_ID: int
     FRENCH_CLUB_THREAD_ID: int
+    TABLE_GAME_THREAD_ID: int
 
     ADMIN_CHAT_ID: int
 
-    def load_from_json(cls, json_file: str) -> ChatSettings:
+    @classmethod
+    def load_from_json(cls, json_file: str):
         with open(json_file, 'r') as f:
             data = json.load(f)
         return cls.parse_obj(data)

@@ -12,7 +12,7 @@ from database.utils import connection
 
 
 @connection
-async def start_cmd(m: types.Message, state: FSMContext, db_session: Async):
+async def start_cmd(m: types.Message, state: FSMContext, db_session: AsyncSession):
     await state.clear()
 
     user = await UserDAO.get_obj(db_session, telegram_id=m.from_user.id)
@@ -21,8 +21,8 @@ async def start_cmd(m: types.Message, state: FSMContext, db_session: Async):
             db_session, m.from_user.id, m.from_user.username, True
         )
     else:
-        if not user.has_bot_chat:
-            user.has_bot_chat = True
+        if not user.has_private:
+            user.has_private = True
             await db_session.commit()
 
 
