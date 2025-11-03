@@ -1,5 +1,3 @@
-from utils.enums import EventType
-
 from datetime import datetime
 
 
@@ -71,17 +69,6 @@ def get_table_game_card_text(activity_name, date_time, place, description, membe
 👥 Мест {members_left}
 💬 {description}
 """
-
-
-
-def get_event_name(event_type: EventType):
-    match (event_type):
-        case (EventType.FRENCH_CLUB):
-            return "🇫🇷 Разговорный французский клуб"
-        case (EventType.BUISNESS_MEETS):
-            return "💼 Мастермайнды / Бизнес"
-        case (EventType.WOMEN_MEETS):
-            return "☕️ Женские психологические встречи"
 
 
 def get_account_description(rating: int):

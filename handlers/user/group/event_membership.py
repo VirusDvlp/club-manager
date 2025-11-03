@@ -15,8 +15,6 @@ from database.utils import connection
 
 from utils.enums import EventType
 
-from text import get_event_name
-
 
 async def notice_user_about_seats_left(original_message: types.Message, members_left: int):
     # Notice user about seats left
@@ -159,7 +157,7 @@ async def user_cancel_membership(c: types.CallbackQuery, db_session: AsyncSessio
                                     await c.bot.send_message(
                                         chat_id=last_in_waiting.user.telegram_id,
                                         text=f"""
-Вы теперь являетесь участником мероприятия {get_event_name(event_type)} {last_in_waiting.event.date_time.str}"""
+Вы теперь являетесь участником мероприятия {EventType(event.event_type)} {last_in_waiting.event.date_time.str}"""
                                     )
                                 except TelegramForbiddenError:
                                     pass

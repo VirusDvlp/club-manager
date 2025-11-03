@@ -27,3 +27,14 @@ class EventType(Enum):
         }
 
         return functions[self](**kwargs)
+
+
+
+    def get_event_name(self):
+        match (self):
+            case (EventType.FRENCH_CLUB):
+                return "🇫🇷 Разговорный французский клуб"
+            case (EventType.BUISNESS_MEETS):
+                return "💼 Мастермайнды / Бизнес"
+            case (EventType.WOMEN_MEETS):
+                return "☕️ Женские психологические встречи"

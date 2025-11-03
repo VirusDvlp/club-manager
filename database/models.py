@@ -66,13 +66,13 @@ class Initiative(Base):
 
 
 class MemberEvent(Base):
-    date_time: Mapped[datetime.datetime]
+    date_time: Mapped[datetime.datetime] = mapped_column()
     place: Mapped[str] = mapped_column(String(200))
     description: Mapped[str] = mapped_column(String(200))
     members_limit: Mapped[int] = mapped_column(default=1)
     members_left: Mapped[int] = mapped_column(default=0)
-    activity_name: Mapped[str] = mapped_column(String(100), null=True)
-    event_type: Mapped[EventType]
+    activity_name: Mapped[str] = mapped_column(String(100), nullable=True)
+    event_type: Mapped[EventType] = mapped_column()
 
     members: Mapped[List["EventMembership"]] = relationship(
         "EventMembership",
