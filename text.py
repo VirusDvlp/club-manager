@@ -63,9 +63,9 @@ def get_buisness_meet_card_text(date_time, place, description, members_left):
 """
 
 
-def get_table_game_card_text(game_name, date_time, place, description, members_left):
+def get_table_game_card_text(activity_name, date_time, place, description, members_left):
     return f"""
-🎲 {game_name}
+🎲 {activity_name}
 📍 {place}
 📅 {date_time.strftime("%d-%m-%Y %H:%M")}
 👥 Мест {members_left}
@@ -86,7 +86,10 @@ def get_event_name(event_type: EventType):
 
 def get_account_description(rating: int):
     return """
-Баллы: {rating}    
+Баллы: {rating}
+
+Мероприятий посещено: {0}
+
 """
 
 

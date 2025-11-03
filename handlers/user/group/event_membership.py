@@ -17,46 +17,6 @@ from utils.enums import EventType
 
 from text import get_event_name
 
-from text import (
-    get_buisness_meet_card_text,
-    get_french_club_card_text,
-    get_women_meets_card_text,
-    get_table_game_card_text
-)
-
-
-def get_event_card_text(event_type, **kwargs):
-    match (kwargs['event_type']):
-        case (EventType.BUISNESS_MEETS):
-            message_text = get_french_club_card_text(
-                date_time=kwargs['date_time'],
-                place=kwargs['place'],
-                description=kwargs['description'],
-                members_left=kwargs['members_left']
-            )
-        case (EventType.WOMEN_MEETS):
-            message_text = get_french_club_card_text(
-                date_time=kwargs['date_time'],
-                place=kwargs['place'],
-                description=kwargs['descripton'],
-                members_left=kwargs['members_left']
-            )
-        case (EventType.FRENCH_CLUB):
-            message_text = get_french_club_card_text(
-                date_time=kwargs['date_time'],
-                place=kwargs['place'],
-                description=kwargs['description'],
-                members_left=kwargs['members_left']
-            )
-        case (EventType.TABLE_GAMES):
-            message_text = get_table_game_card_text(
-                date_time=['date_time'],
-                place=kwargs['place'],
-                description=kwargs['description'],
-                members_left=kwargs['members_left'],
-                game_name=kwargs['activity_name']
-            )
-
 
 async def notice_user_about_seats_left(original_message: types.Message, members_left: int):
     # Notice user about seats left
@@ -118,19 +78,23 @@ async def user_request_membership(c: types.CallbackQuery, db_session: AsyncSessi
 
                         if event.members_left > 0:
                             event.members_left -= 1
-                            is_memnber_of_event = True
+                            is_member_of_event = True
                             text = "Вы успешно записались на мероприятие!"
                         else:
-                            is_memnber_of_event = False
+                            is_member_of_event = False
                             text = "На мероприятии не осталось свободных мест. Вы в листе ожидания"
 
                         await EventMembershipDAO.add(
                             db_session,
                             user_id=user.id,
                             event_id=event.id,
-                            is_member=is_memnber_of_event
+                            is_member=is_member_of_event
                         )
-
+                        await c.message.edit_text(
+                            text=EventType(event.event_type).get_card_text(
+                                **event.model_to_dict()
+                            )
+                        )
                         await c.answer(
                             text,
                             show_alert=True
@@ -214,6 +178,11 @@ async def user_cancel_membership(c: types.CallbackQuery, db_session: AsyncSessio
                                 await UserDAO.change_user_rating(db_session, c.from_user.id, -1)
                                 alert_message = "Ты решил отменить участие менее чем за сутки? 😬 Минус 1 балл!"
 
+                        await c.message.edit_text(
+                            text=EventType(event.event_type).get_card_text(
+                                **event.model_to_dict()
+                            )
+                        )
                         await c.answer(
                             alert_message,
                             show_alert=True

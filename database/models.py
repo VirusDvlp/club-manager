@@ -29,6 +29,11 @@ class Base(AsyncAttrs, DeclarativeBase):
 
         return ''.join(table_name) + 's'
 
+        def model_to_dict(model_instance):
+            return {column.name: getattr(model_instance, column.name) 
+                    for column in model_instance.__table__.columns}
+
+
 
 class User(Base):
     telegram_id: Mapped[int] = mapped_column(BigInteger, unique=True)
