@@ -25,7 +25,7 @@ event_type_markup = InlineKeyboardMarkup(
             )
         ],
         [InlineKeyboardButton(
-            text="☕️ Женские психологические встречи",
+            text="💼 Мастермайнды / Бизнес-встречи",
             callback_data="createevent_2"
         )],
         [InlineKeyboardButton(
