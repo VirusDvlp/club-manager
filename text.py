@@ -34,7 +34,7 @@ def get_initiative_text(date, place, comment, activity_type):
 
 def get_french_club_card_text(date_time, place, description, members_left):
     return f"""
-💼  Мастермайнд
+🇫🇷 Разговорный клуб
 📍 {place}
 📅 {date_time.strftime("%d-%m-%Y %H:%M")}  
 👥 Мест осталось: {members_left}  

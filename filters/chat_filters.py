@@ -1,7 +1,6 @@
 from aiogram import types
 
-
-from utils.logger import get_bot_logger
+from config import chat_settings
 
 
 
