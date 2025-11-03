@@ -55,7 +55,7 @@ async def create_dating_profile(m: types.Message, state: FSMContext):
         chat_id=chat_settings.GROUP_ID,
         message_thread_id=chat_settings.DATING_PROFILES_THREAD_ID,
         photo=s_data['photo'],
-        caprion=get_dating_profile_descr(
+        caption=get_dating_profile_descr(
             s_data['alias'],
             m.text.strip(),
             m.from_user.username

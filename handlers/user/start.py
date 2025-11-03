@@ -37,5 +37,6 @@ def register_user_start_handlers(dp: Dispatcher):
     dp.message.register(
         start_cmd,
         F.chat.type == ChatType.PRIVATE,
-        CommandStart()
+        CommandStart(),
+        StateFilter('*')
     )

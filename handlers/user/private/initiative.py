@@ -24,13 +24,13 @@ from utils.enums import EventType
 
 async def ask_date(c: types.CallbackQuery, state: FSMContext):
 
-    await c.answer()
-
     await state.set_state(CreateInitiativeFSM.date_state)
 
     await c.message.answer(
         "Введите дату и время мероприятия в формате ДД-ММ-ГГГГ чч:мм"
     )
+
+    await c.answer()
 
 
 async def ask_place(m: types.Message, state: FSMContext):
