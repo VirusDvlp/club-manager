@@ -2,6 +2,8 @@ import os
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import BaseModel
 
+from typing import List
+
 import json
 
 class Settings(BaseSettings):
@@ -35,7 +37,11 @@ class ChatSettings(BaseModel):
     FRENCH_CLUB_THREAD_ID: int
     TABLE_GAME_THREAD_ID: int
 
+    # admin
+
     ADMIN_CHAT_ID: int
+
+    ADMIN_ID_LIST: List[int]
 
     @classmethod
     def load_from_json(cls, json_file: str):

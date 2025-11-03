@@ -1,14 +1,14 @@
 from datetime import datetime
 
 
-def get_activity_suggestion_text(name, description, date: datetime, place, username):
+def get_activity_suggestion_text(name, description, date: str, place, username):
     return f"""
 Новое предложение активности от пользователя @{username}
 Название: {name}
 
 {description}
 
-Дата и время: {date.strftime("%d-%m-%Y %H:%M")}
+Дата и время: {date}
 Место встречи: {place}
 """
 
@@ -72,7 +72,7 @@ def get_table_game_card_text(activity_name, date_time, place, description, membe
 
 
 def get_account_description(rating: int):
-    return """
+    return f"""
 Баллы: {rating}
 
 Мероприятий посещено: {0}
