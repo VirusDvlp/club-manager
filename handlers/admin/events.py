@@ -60,7 +60,7 @@ async def ask_place(m: types.Message, state: FSMContext):
     date_time = validate_date_time(m.text.strip())
     
     if not date_time:
-        await c.message.answer("Неверный формат даты и времени, попробуйте еще раз")
+        await m.answer("Неверный формат даты и времени, попробуйте еще раз")
         return 1
 
     await state.update_data(date_time=date_time)
