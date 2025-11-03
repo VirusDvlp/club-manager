@@ -46,7 +46,7 @@ async def ask_date_time(c: types.CallbackQuery, state: FSMContext):
     """
     Создание события универсально сразу для разных видов событий
     """
-    event_type = int(c.data.split('_')[1])
+    event_type = EventType(int(c.data.split('_')[1]))
     await state.set_state(CreateEventFSM.date_time_state)
     await state.update_data(event_type=event_type)
 
@@ -101,7 +101,7 @@ async def get_description(m: types.Message, state: FSMContext):
 
     s_data = await state.get_data()
 
-    if s_data['event_type'] == 3:
+    if s_data['event_type'] == EventType.WOMEN_MEETS:
         await state.clear()
         s_data['members_limit'] = 10
         await create_event(m.bot, m.from_user.id, s_data)

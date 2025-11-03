@@ -44,6 +44,7 @@ async def notice_user_about_seats_left(original_message: types.Message, members_
 @connection
 async def user_request_membership(c: types.CallbackQuery, db_session: AsyncSession):
     a, event_id, event_type = c.data.split('_')
+    event_type = EventType(event_type)
 
     user = await UserDAO.get_obj(db_session, telegram_id=c.from_user.id)
 
@@ -116,6 +117,7 @@ async def user_request_membership(c: types.CallbackQuery, db_session: AsyncSessi
 @connection
 async def user_cancel_membership(c: types.CallbackQuery, db_session: AsyncSession):
     a, event_id, event_type = c.data.split('_')
+    event_type = EventType(event_type)
 
     user = await UserDAO.get_obj(db_session, telegram_id=c.from_user.id)
 
@@ -157,7 +159,7 @@ async def user_cancel_membership(c: types.CallbackQuery, db_session: AsyncSessio
                                     await c.bot.send_message(
                                         chat_id=last_in_waiting.user.telegram_id,
                                         text=f"""
-Вы теперь являетесь участником мероприятия {EventType(event.event_type)} {last_in_waiting.event.date_time.str}"""
+Вы теперь являетесь участником мероприятия {EventType(event.event_type).get_event_name()} {last_in_waiting.event.date_time.str}"""
                                     )
                                 except TelegramForbiddenError:
                                     pass
