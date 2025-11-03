@@ -24,7 +24,7 @@ class Settings(BaseSettings):
 
 
 class ChatSettings(BaseModel):
-    GROUP_ID: int
+    GROUP_ID: STR
 
     # topics in supergroup
 
