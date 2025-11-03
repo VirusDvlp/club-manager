@@ -48,6 +48,11 @@ class User(Base):
         back_populates="user"
     )
 
+    initiatives: Mapped[List["Initiative"]] = relationship(
+        "Initiative",
+        back_populates="creator"
+    )
+
 
 class Initiative(Base):
 
