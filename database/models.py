@@ -89,7 +89,7 @@ class EventMembership(Base):
 
     user: Mapped["User"] = relationship(
         "User",
-        back_populates="initiatives"
+        back_populates="memberships"
     )
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
