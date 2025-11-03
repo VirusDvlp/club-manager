@@ -61,7 +61,7 @@ async def user_request_membership(c: types.CallbackQuery, db_session: AsyncSessi
 
             pass
         case EventType.FRENCH_CLUB | EventType.BUISNESS_MEETS | EventType.WOMEN_MEETS:
-            event = await MembersEventDAO.get_obj(db_session, id=event_id)
+            event = await MembersEventDAO.get_obj(db_session, id=int(event_id))
 
             if event:
                 if datetime.now() < event.date_time:
@@ -132,7 +132,7 @@ async def user_cancel_membership(c: types.CallbackQuery, db_session: AsyncSessio
     match (event_type):
         
         case EventType.FRENCH_CLUB | EventType.BUISNESS_MEETS | EventType.WOMEN_MEETS | EventType.TABLE_GAMES:
-            event = await MembersEventDAO.get_obj(db_session, id=event_id)
+            event = await MembersEventDAO.get_obj(db_session, id=int(event_id))
 
             if event:
                 if datetime.now() < event.date_time:
