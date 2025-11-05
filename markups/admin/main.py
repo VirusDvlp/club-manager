@@ -4,7 +4,7 @@ from markups.user.main import main_user_markup
 
 
 main_markup_for_admin = InlineKeyboardMarkup(
-    inline_keyboard=main_user_markup
+    inline_keyboard=main_user_markup.inline_keyboard
 )
 main_markup_for_admin.inline_keyboard.extend(
     [
