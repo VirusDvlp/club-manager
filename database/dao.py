@@ -2,7 +2,7 @@ from typing import List, Any, Dict
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import select, asc, update
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload
 
 from .models import User, MemberEvent, EventMembership, Initiative
 
@@ -110,8 +110,7 @@ class MembersEventDAO(BaseDAO):
     @classmethod
     async def get_event_with_members(cls, db_session: AsyncSession, event_id: int):
         query = select(MemberEvent).options(
-            selectinload(MemberEvent.members)
-            .selectinload(EventMembership.user)
+            selectinload(MemberEvent.members).selectinload(EventMembership.user)
         ).where(MemberEvent.id == event_id)
 
         res = await db_session.execute(query)
