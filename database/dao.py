@@ -134,7 +134,7 @@ class MembersEventDAO(BaseDAO):
             .options(
                 selectinload(User.memberships).selectinload(EventMembership.event)
             )
-            .where(User.user_id == user_id)
+            .where(User.telegram_id == user_id)
         )
     
         result = await session.execute(stmt)
