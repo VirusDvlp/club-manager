@@ -1,3 +1,6 @@
+from sqlalchemy.ext.asyncio import AsyncSession
+
+
 from .events_paging import EventsPaging
 
 from markups.admin.event_manage import get_events_list_markup
