@@ -60,7 +60,7 @@ async def send_event_info(c: types.CallbackQuery, db_session, *args):
             for member in event.members:
                 if member.is_member:
                     if member.is_bot_user:
-                        message_text += f"{i}) @{member.user.username}"
+                        message_text += f"{i}) @{member.user.telegram_username}"
                     else:
                         message_text += f"\n{i}) {member.name}"
         else:
