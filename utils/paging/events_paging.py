@@ -17,7 +17,7 @@ class EventsPaging(Paging):
     EMPTY_SET_MESSAGE = "Не найдено мероприятий"
 
     def __init__(self, event_type: EventType, page: int = 0):
-        super().__init__(page, "events")
+        super().__init__(page)
         self.event_type = event_type
 
     async def get_queryset(
