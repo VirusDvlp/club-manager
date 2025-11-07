@@ -32,28 +32,10 @@ def get_initiative_text(date, place, comment, activity_type):
 """
 
 
-def get_french_club_card_text(date_time, place, description, members_left, **kwargs):
+def get_french_club_card_text(date_time, place, description, members_left, holder, **kwargs):
     return f"""
 🇫🇷 Разговорный клуб
-📍 {place}
-📅 {date_time.strftime("%d-%m-%Y %H:%M")}  
-👥 Мест осталось: {members_left}  
-💬 {description}
-"""
-
-
-def get_women_meets_card_text(date_time, place, description, members_left, **kwargs):
-    return f"""
-☕️ Женская психологическая встреча
-📍 {place}
-📅 {date_time.strftime("%d-%m-%Y %H:%M")}  
-👥 Мест осталось: {members_left}  
-💬 {description}
-"""
-
-def get_buisness_meet_card_text(date_time, place, description, members_left, **kwargs):
-    return f"""
-🇫🇷 Разговорный клуб  
+🗣 Ведущий - {holder}
 📍 {place}
 📅 {date_time.strftime("%d-%m-%Y %H:%M")}  
 👥 Мест осталось: {members_left}
@@ -61,9 +43,31 @@ def get_buisness_meet_card_text(date_time, place, description, members_left, **k
 """
 
 
-def get_table_game_card_text(activity_name, date_time, place, description, members_left, **kwargs):
+def get_women_meets_card_text(date_time, place, description, members_left, holder, **kwargs):
+    return f"""
+☕️ Женская психологическая встреча
+🗣 Ведущий - {holder}
+📍 {place}
+📅 {date_time.strftime("%d-%m-%Y %H:%M")}  
+👥 Мест осталось: {members_left}  
+💬 {description}
+"""
+
+def get_buisness_meet_card_text(date_time, place, description, members_left, holder, **kwargs):
+    return f"""
+💼 Мастермайнды / Бизнес
+🗣 Ведущий - {holder}
+📍 {place}
+📅 {date_time.strftime("%d-%m-%Y %H:%M")}  
+👥 Мест осталось: {members_left}
+💬 {description}
+"""
+
+
+def get_table_game_card_text(activity_name, date_time, place, description, members_left, holder, **kwargs):
     return f"""
 🎲 {activity_name}
+🗣 Ведущий - {holder}
 📍 {place}
 📅 {date_time.strftime("%d-%m-%Y %H:%M")}
 👥 Мест {members_left}

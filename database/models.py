@@ -78,6 +78,7 @@ class MemberEvent(Base):
     members_left: Mapped[int] = mapped_column(default=0)
     activity_name: Mapped[str] = mapped_column(String(100), nullable=True)
     event_type: Mapped[EventType] = mapped_column()
+    holder: Mapped[str] = mapped_column(String(100))
 
     members: Mapped[List["EventMembership"]] = relationship(
         "EventMembership",

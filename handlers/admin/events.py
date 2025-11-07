@@ -69,9 +69,16 @@ async def ask_place(m: types.Message, state: FSMContext):
     await m.answer("Введите адрес мероприятия")
 
 
+async def ask_holder(m: types.Message, state: FSMContext):
+    await state.update_data(place=m.text.strip())
+    await state.set_state(CreateEventFSM.holder_state)
+
+    await m.answer("Введите имя ведущего")
+
+
 
 async def ask_description(m: types.Message, state: FSMContext):
-    await state.update_data(place=m.text.strip())
+    await state.update_data(holder=m.text.strip())
     
 
     s_data = await state.get_data()
@@ -130,43 +137,21 @@ async def create_event(bot, creator_id: int, state_data: dict, db_session: Async
         state_data['descr'],
         state_data['members_limit'],
         state_data['event_type'],
-        state_data.get("game_name", None)
+        state_data.get("game_name", None),
+        state_data['holder']
     )
+
+    message_text = new_event.event_type.get_card_text(**new_event.model_to_dict())
 
     match (state_data['event_type']):
         case (EventType.BUISNESS_MEETS):
             thread_id = chat_settings.BUISNESS_MEETS_THREAD_ID
-            message_text = get_buisness_meet_card_text(
-                date_time=state_data['date_time'],
-                place=state_data['place'],
-                description=state_data['descr'],
-                members_left=state_data['members_limit']
-            )
         case (EventType.WOMEN_MEETS):
             thread_id = chat_settings.WOMEN_MEETS_THREAD_ID
-            message_text = get_women_meets_card_text(
-                date_time=state_data['date_time'],
-                place=state_data['place'],
-                description=state_data['descr'],
-                members_left=state_data['members_limit']
-            )
         case (EventType.FRENCH_CLUB):
             thread_id = chat_settings.FRENCH_CLUB_THREAD_ID
-            message_text = get_french_club_card_text(
-                date_time=state_data['date_time'],
-                place=state_data['place'],
-                description=state_data['descr'],
-                members_left=state_data['members_limit']
-            )
         case (EventType.TABLE_GAMES):
             thread_id = chat_settings.TABLE_GAME_THREAD_ID
-            message_text = get_table_game_card_text(
-                date_time=state_data['date_time'],
-                place=state_data['place'],
-                description=state_data['descr'],
-                members_left=state_data['members_limit'],
-                game_name=state_data['game_name']
-            )
 
     await bot.send_message(
         chat_id=chat_settings.GROUP_ID,
@@ -197,7 +182,8 @@ def register_create_event_handlers(dp: Dispatcher):
     dp.callback_query.register(ask_event_type, F.data == "add_event")
     dp.callback_query.register(ask_date_time, F.data.startswith("eventtype_"))
     dp.message.register(ask_place, StateFilter(CreateEventFSM.date_time_state))
-    dp.message.register(ask_description, StateFilter(CreateEventFSM.place_state))
+    dp.message.register(ask_holder, StateFilter(CreateEventFSM.place_state))
+    dp.message.register(ask_description, StateFilter(CreateEventFSM.holder_state))
     dp.message.register(get_game_name, StateFilter(CreateEventFSM.game_name_state))
     dp.message.register(get_description, StateFilter(CreateEventFSM.descr_state))
     dp.message.register(

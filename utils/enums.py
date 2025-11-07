@@ -38,3 +38,5 @@ class EventType(Enum):
                 return "💼 Мастермайнды / Бизнес"
             case (EventType.WOMEN_MEETS):
                 return "☕️ Женские психологические встречи"
+            case (EventType.TABLE_GAMES):
+                return "🎲 Настольные игры"

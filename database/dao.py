@@ -91,7 +91,8 @@ class MembersEventDAO(BaseDAO):
         description,
         members_limit,
         event_type,
-        activity_name
+        activity_name,
+        holder
     ):
         new_event = cls.model(
             date_time=date_time,
@@ -100,7 +101,8 @@ class MembersEventDAO(BaseDAO):
             members_limit=members_limit,
             members_left=members_limit,
             event_type=event_type,
-            activity_name=activity_name
+            activity_name=activity_name,
+            holder=holder
         )
         db_session.add(new_event)
         await db_session.flush()
