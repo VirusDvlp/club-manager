@@ -77,7 +77,7 @@ class Paging:
             )
         return reply_markup
 
-    async def get_current_page(self, event_type):
+    async def get_current_page(self):
         if self.queryset:
             if self.page > 0:
                 self.is_prev = True
