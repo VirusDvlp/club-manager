@@ -17,6 +17,8 @@ from utils.paging.events_paging import EventsPaging
 
 from fsm.admin.events_manage import NewEventMemberFSM
 
+from utils.enums import EventType
+
 
 async def ask_event_type(c: types.CallbackQuery):
     await c.answer()
@@ -32,7 +34,7 @@ async def send_event_list(c: types.CallbackQuery, db_session, *args):
     
     paging = EventsPaging()
 
-    await paging.get_queryset(db_session, event_type)
+    await paging.get_queryset(db_session, event_type=EventType(int(event_type)))
     await paging.get_current_page()
 
     await c.message.answer(
