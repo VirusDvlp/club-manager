@@ -18,3 +18,9 @@ class CreateInitiativeFSM(StatesGroup):
     date_state = State()
     place_state = State()
     comment_state = State()
+
+
+class RegistrationFSM(StatesGroup):
+    name_state = State()
+    alias_state = State()
+    profile_photo_state = State()
