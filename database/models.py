@@ -38,8 +38,8 @@ class User(Base):
     telegram_id: Mapped[int] = mapped_column(BigInteger, unique=True)
     telegram_username: Mapped[str] = mapped_column(String(32))
 
-    name: Mapped[str] = mapped_column(String(100), default="Не указано")
-    alias: Mapped[str] = mapped_column(String(100), default="Анонимный пользователь")
+    name: Mapped[str] = mapped_column(String(100), server_default="Не указано")
+    alias: Mapped[str] = mapped_column(String(100), server_default="Анонимный пользователь")
 
     register_date: Mapped[datetime.datetime] = mapped_column(server_default=func.now())
     
