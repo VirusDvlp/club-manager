@@ -35,27 +35,28 @@ async def verify_initiative(c: types.CallbackQuery, db_session, *args):
             )
         else:
             if verif == 'y':
-                initiative.verified = True
-                m = await c.message.bot.send_message(
-                    chat_id=chat_settings.GROUP_ID,
-                    message_thread_id=chat_settings.INITIATIVES_THREAD_ID,
-                    text=get_initiative_text(
-                        initiative.date_time,
-                        initiative.place,
-                        initiative.description,
-                        initiative.activity_type
-                    ),
-                    reply_markup=get_take_part_in_event_markup(
-                        init_id,
-                        EventType.INITIATIVE
-                    )
-                )
-
-                await c.message.bot.send_message(
-                    chat_id=initiative.creator.telegram_id,
-                    text=f"Ваша инициатива была одобрена администраторами и успешно <a href=\"{m.get_url(include_thread_id=True)}\">опубликована</a>",
-                    parse_mode=ParseMode.HTML
-                )
+                pass
+                # initiative.verified = True
+                # m = await c.message.bot.send_message(
+                #     chat_id=chat_settings.GROUP_ID,
+                #     message_thread_id=chat_settings.INITIATIVES_THREAD_ID,
+                #     text=get_initiative_text(
+                #         initiative.date_time,
+                #         initiative.place,
+                #         initiative.description,
+                #         initiative.activity_type
+                #     ),
+                #     reply_markup=get_take_part_in_event_markup(
+                #         init_id,
+                #         EventType.INITIATIVE
+                #     )
+                # )
+                #
+                # await c.message.bot.send_message(
+                #     chat_id=initiative.creator.telegram_id,
+                #     text=f"Ваша инициатива была одобрена администраторами и успешно <a href=\"{m.get_url(include_thread_id=True)}\">опубликована</a>",
+                #     parse_mode=ParseMode.HTML
+                # )
 
             else:
                 await db_session.delete(initiative)
