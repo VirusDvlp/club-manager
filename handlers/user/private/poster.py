@@ -28,8 +28,7 @@ async def send_event_list(c: types.CallbackQuery, db_session: AsyncSession, *arg
 
     paging = EventsPaging(EventType(int(event_type)), prefix="af")
     await paging.get_queryset(
-        db_session,
-        c.from_user.id
+        db_session
     )
     await paging.get_current_page()
 

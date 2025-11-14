@@ -15,7 +15,7 @@ class Paging:
     prefix = ""
     total_pages = 0
     queryset = []
-    objects_in_page = 5
+    self.objects_in_page = 5
 
     def __init__(self, page: int = 0, prefix: str = ''):
         self.page = page
@@ -82,10 +82,10 @@ class Paging:
         if self.queryset:
             if self.page > 0:
                 self.is_prev = True
-            diff = len(self.queryset) - self.page * objects_in_page
+            diff = len(self.queryset) - self.page * self.objects_in_page
             if diff > 0:
-                self.queryset = self.queryset[self.page * objects_in_page: (self.page + 1) * objects_in_page]
-                if diff > objects_in_page:
+                self.queryset = self.queryset[self.page * self.objects_in_page: (self.page + 1) * self.objects_in_page]
+                if diff > self.objects_in_page:
                     self.is_next = True
             else:
                 self.queryset = []
@@ -94,12 +94,12 @@ class Paging:
         if self.queryset:
             self.is_prev = True
             self.page += 1
-            diff = len(self.queryset) - self.page * objects_in_page
+            diff = len(self.queryset) - self.page * self.objects_in_page
             if diff > 0:
-                if diff > objects_in_page:
+                if diff > self.objects_in_page:
                     self.is_next = True
 
-                self.queryset = self.queryset[self.page * objects_in_page: (self.page + 1) * objects_in_page]
+                self.queryset = self.queryset[self.page * self.objects_in_page: (self.page + 1) * self.objects_in_page]
 
             else:
                 self.queryset = []
@@ -111,12 +111,12 @@ class Paging:
                 self.is_prev = True
             if self.page >= 0:
 
-                diff = len(self.queryset) - self.page * objects_in_page
+                diff = len(self.queryset) - self.page * self.objects_in_page
                 if diff > 0:
-                    if diff > objects_in_page:
+                    if diff > self.objects_in_page:
                         self.is_next = True
 
-                    self.queryset = self.queryset[self.page * objects_in_page: (self.page + 1) * self.objects_in_page]
+                    self.queryset = self.queryset[self.page * self.objects_in_page: (self.page + 1) * self.objects_in_page]
 
                 else:
                     self.queryset = []
