@@ -53,6 +53,7 @@ async def start_cmd(m: types.Message, state: FSMContext, db_session: AsyncSessio
 
 async def ask_alias(m: types.Message, state: FSMContext):
     await state.update_data(name=m.text)
+    await state.set_state(RegistrationFSM.alias_state)
     await m.answer(
         "Отлично! Теперь придумайте себе псеводним"
     )
