@@ -57,6 +57,11 @@ class User(Base):
         back_populates="creator"
     )
 
+    dating_profiles: Mapped[List["DatingProfile"]] = relationship(
+        "DatingProfile",
+        back_populates="user"
+    )
+
 
 class UserProfile(Base):
     user: Mapped["User"] = relationship(
