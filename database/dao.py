@@ -62,6 +62,14 @@ class UserDAO(BaseDAO):
         )
 
     @classmethod
+    async def get_obj(cls, session: AsyncSession, **values):
+        query = select(cls.model).options(selectinload(User.profile)).filter_by(**values)
+
+        result = await session.execute(query)
+        obj = result.scalar_one_or_none()
+        return obj
+
+    @classmethod
     async def get_active_users(cls, session: AsyncSession):
         query = select(cls.model).filter_by(has_private=True)
 
