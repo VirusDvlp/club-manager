@@ -75,7 +75,7 @@ async def ask_interests(m: types.Message, state: FSMContext):
 
 
 async def ask_birthday(m: types.Message, state: FSMContext):
-    await state.set_state(RegistrationFSM.sex_state)
+    await state.set_state(RegistrationFSM.birthday_state)
     await state.update_data(interests=m.text)
 
     await m.answer("Введите свой день рождения в формате дд-мм-гггг")
