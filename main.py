@@ -12,6 +12,7 @@ async def on_startup():
     register_all_handlers(dp)
 
     setup_default_jobs(scheduler)
+    scheduler.start()
 
     get_bot_logger().info('Бот начал свою работу')
 
