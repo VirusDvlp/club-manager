@@ -83,7 +83,7 @@ async def ask_birthday(m: types.Message, state: FSMContext):
 
 async def ask_sex(m: types.Message, state: FSMContext):
 
-    date_birthday = validate_date_time(m.text.strip(), "%d-%m-%Y")
+    date_birthday = validate_date_time(m.text.strip(), True)
 
     if date_birthday:
         await state.set_state(RegistrationFSM.sex_state)
