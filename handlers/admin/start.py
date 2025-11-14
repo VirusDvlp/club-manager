@@ -20,7 +20,7 @@ async def admin_start_cmd(m: types.Message, state: FSMContext, db_session, *args
         db_session,
         telegram_id=m.from_user.id,
     )
-    if not user:
+    if not user or not user.has_private:
         await UserDAO.register_user(
             db_session,
             telegram_id=m.from_user.id,
