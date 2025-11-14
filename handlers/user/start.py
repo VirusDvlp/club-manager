@@ -95,6 +95,7 @@ async def ask_sex(m: types.Message, state: FSMContext):
 
 
 async def ask_social_link(c: types.CallbackQuery, state: FSMContext):
+    await state.set_state(RegistrationFSM.social_link_state)
     choice = c.data
 
     if choice == "skip_step":
