@@ -76,11 +76,9 @@ def get_table_game_card_text(activity_name, date_time, place, description, membe
 """
 
 
-def get_account_description(rating: int, user_name: str, alias: str, reg_date: datetime, interests: str, city: str):
+def get_account_description(rating: int, user_name: str, reg_date: datetime, interests: str):
     return f"""
 Имя: {user_name}
-Псевдоним: {alias}
-Город: {city}
 
 Дата регистрации: {reg_date.strftime("%d-%m-%Y %H:%M")}
 

@@ -70,9 +70,7 @@ class UserProfile(Base):
     )
 
     name: Mapped[str] = mapped_column(String(100), server_default="Не указано")
-    alias: Mapped[str] = mapped_column(String(100), server_default="Анонимный пользователь")
     city: Mapped[str] = mapped_column(String(20))
-    birthday: Mapped[datetime.datetime] = mapped_column()
     interests: Mapped[str] = mapped_column(String(150))
     sex: Mapped[Sex] = mapped_column(nullable=True)
     social_link: Mapped[str] = mapped_column(String(100), nullable=True)

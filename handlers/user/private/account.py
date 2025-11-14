@@ -24,10 +24,8 @@ async def send_account_info(c: types.CallbackQuery, db_session: AsyncSession):
         text=get_account_description(
             rating=user.profile.rating,
             user_name=user.profile.name,
-            alias=user.profile.alias,
             reg_date=user.register_date,
             interests=user.profile.interests,
-            city=user.profile.city
         ),
         reply_markup=account_manage_markup
     )
@@ -71,10 +69,8 @@ async def update_value(m: types.Message, state: FSMContext, db_session: AsyncSes
         text="Ваш обновленный профиль:\n\n" + get_account_description(
             rating=user.profile.rating,
             user_name=user.profile.name,
-            alias=user.profile.alias,
             reg_date=user.register_date,
             interests=user.profile.interests,
-            city=user.profile.city
         ),
         reply_markup=account_manage_markup
     )

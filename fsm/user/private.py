@@ -23,10 +23,7 @@ class CreateInitiativeFSM(StatesGroup):
 
 class RegistrationFSM(StatesGroup):
     name_state = State()
-    alias_state = State()
     profile_photo_state = State()
-    city_state = State()
-    birthday_state = State()
     social_link_state = State()
     sex_state = State()
     interests_state = State()
