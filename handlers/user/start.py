@@ -35,17 +35,17 @@ async def start_cmd(m: types.Message, state: FSMContext, db_session: AsyncSessio
             reg = True
 
     if reg:
-        await m.answer(
-            "Открыто главное меню",
-            reply_markup=main_user_markup
-        )
-    else:
         await state.set_state(RegistrationFSM.name_state)
         await m.answer_photo(
             photo=types.FSInputFile("image/start_image.jpg"),
             caption="""
 Приветстсвую! Я твой помощник в комьюнити RendezVous.\n Давай познакомимся. Как тебя зовут?
 """
+        )
+    else:
+        await m.answer(
+            "Открыто главное меню",
+            reply_markup=main_user_markup
         )
 
 
