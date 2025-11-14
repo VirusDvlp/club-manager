@@ -25,12 +25,13 @@ async def what_to_do(c: types.CallbackQuery):
     await c.answer()
 
 
-async def ask_profile_photo(m: types.Message, state: FSMContext):
+async def ask_profile_photo(c: types.CallbackQuery, state: FSMContext):
     await state.set_state(CreateDatingProfileFSM.profile_photo_state)
 
-    await m.answer(
+    await c.message.answer(
         "Пришлите фотографию для своей анкеты"
     )
+    await c.answer()
 
 
 async def ask_descr(m: types.Message, state: FSMContext):
@@ -89,8 +90,6 @@ async def create_dating_profile(c: types.CallbackQuery, state: FSMContext, db_se
 
 @connection
 async def send_first_profile(c: types.CallbackQuery, db_session: AsyncSession, *args):
-    page = int(c.data.split('_')[1])
-
     profiles = await DatingProfileDAO.get_profiles_for_user(db_session=db_session, user_id=c.from_user.id)
 
     if profiles:
@@ -104,7 +103,7 @@ async def send_first_profile(c: types.CallbackQuery, db_session: AsyncSession, *
                 interests=profile.interests,
                 goal=profile.goal
             ),
-            reply_markup=get_dating_profile_markup(profile.id, page)
+            reply_markup=get_dating_profile_markup(profile.id, 0)
         )
 
         await c.answer()
