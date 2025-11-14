@@ -115,7 +115,7 @@ async def ask_social_link(c: types.CallbackQuery, state: FSMContext):
 
 async def get_social_link(m: types.Message, state: FSMContext):
     await state.update_data(social_link=m.text)
-    await finish_registration(m, await state.get_data())
+    await finish_registration(m, await state.get_data(), user_id=m.from_user.id)
 
 
 async def skip_social_link(c: types.CallbackQuery, state: FSMContext):
